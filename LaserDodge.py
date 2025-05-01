@@ -13,7 +13,7 @@ import subprocess
 
 
 def check_for_update():
-    VERSION = "1.0.0"  
+    VERSION = "1.1.1"
     VERSION_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/version.txt"
     SCRIPT_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/LaserDodge.py"
 
@@ -23,7 +23,7 @@ def check_for_update():
         if latest_version != VERSION:
             print(Fore.YELLOW + f"New version {latest_version} available. Updating...")
 
-            
+        
             response = requests.get(SCRIPT_URL)
             temp_script_path = os.path.join(tempfile.gettempdir(), "LaserDodge_updated.py")
 
@@ -31,16 +31,18 @@ def check_for_update():
                 f.write(response.content)
 
             print(Fore.GREEN + "Update complete.")
-
             
+            
+            print(Fore.GREEN + f"Updated script saved to: {temp_script_path}")
+
             
             print(Fore.GREEN + "Launching the updated version...")
 
             
             subprocess.Popen([sys.executable, temp_script_path])
-            print(Fore.GREEN + "New version is now running.")
 
-           
+            
+            print(Fore.GREEN + "New version is now running.")
             sys.exit()
 
         else:
@@ -48,6 +50,7 @@ def check_for_update():
 
     except Exception as e:
         print(Fore.RED + f"Update check failed: {e}")
+
 
 
 colorama.init()
