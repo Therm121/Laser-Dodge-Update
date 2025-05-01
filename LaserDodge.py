@@ -10,7 +10,6 @@ import tempfile
 from colorama import Fore
 import subprocess
 
-print("hello")
 
 def check_for_update():
     
