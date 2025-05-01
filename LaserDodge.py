@@ -8,9 +8,8 @@ import sys
 import requests
 from colorama import Fore
 
-# Check for update before running the game
 def check_for_update():
-    VERSION = "1.0.0"  # Current version of your script
+    VERSION = "1.0.0" 
     VERSION_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/version.txt"
     SCRIPT_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/LaserDodge.py"
 
@@ -141,5 +140,5 @@ def main():
     pygame.quit()
 
 if __name__ == "__main__":
-    check_for_update()  # Add this line to check for updates before running the game
+    check_for_update()  
     main()
