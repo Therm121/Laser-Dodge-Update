@@ -14,7 +14,7 @@ print("hello")
 
 def check_for_update():
     
-    VERSION = "1.1.1"
+    VERSION = "1.1.2"
     VERSION_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/version.txt"
     SCRIPT_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/LaserDodge.py"
 
