@@ -13,7 +13,7 @@ import subprocess
 
 
 def check_for_update():
-    VERSION = "1.0.0"  # Current version of your script
+    VERSION = "1.0.0"  
     VERSION_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/version.txt"
     SCRIPT_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/LaserDodge.py"
 
