@@ -13,17 +13,31 @@ import subprocess
 
 
 def check_for_update():
+    
     VERSION = "1.1.1"
     VERSION_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/version.txt"
     SCRIPT_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/LaserDodge.py"
 
+    
+    version_file_path = os.path.join(os.path.expanduser("~"), "Documents", "LaserDodge", "current_version.txt")
+    
     try:
         print(Fore.CYAN + "Checking for updates...")
+
+       
+        if os.path.exists(version_file_path):
+            with open(version_file_path, "r") as version_file:
+                stored_version = version_file.read().strip()
+        else:
+            stored_version = VERSION  
+        
         latest_version = requests.get(VERSION_URL).text.strip()
-        if latest_version != VERSION:
-            print(Fore.YELLOW + f"New version {latest_version} available. Updating...")
 
         
+        if latest_version != stored_version:
+            print(Fore.YELLOW + f"New version {latest_version} available. Updating...")
+
+           
             response = requests.get(SCRIPT_URL)
             temp_script_path = os.path.join(tempfile.gettempdir(), "LaserDodge_updated.py")
 
@@ -32,14 +46,17 @@ def check_for_update():
 
             print(Fore.GREEN + "Update complete.")
             
+            # Update the version file
+            os.makedirs(os.path.dirname(version_file_path), exist_ok=True)
+            with open(version_file_path, "w") as version_file:
+                version_file.write(latest_version)
             
-            print(Fore.GREEN + f"Updated script saved to: {temp_script_path}")
-
             
             print(Fore.GREEN + "Launching the updated version...")
+            subprocess.Popen([sys.executable, temp_script_path])
 
             
-            subprocess.Popen([sys.executable, temp_script_path])
+            time.sleep(2)
 
             
             print(Fore.GREEN + "New version is now running.")
@@ -50,8 +67,6 @@ def check_for_update():
 
     except Exception as e:
         print(Fore.RED + f"Update check failed: {e}")
-
-
 
 colorama.init()
 username = getpass.getuser()
