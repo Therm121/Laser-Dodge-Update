@@ -8,8 +8,9 @@ import sys
 import requests
 from colorama import Fore
 
+# Check for update before running the game
 def check_for_update():
-    VERSION = "1.0.0" 
+    VERSION = "1.0.0"  # Current version of your script
     VERSION_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/version.txt"
     SCRIPT_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/LaserDodge.py"
 
@@ -23,11 +24,18 @@ def check_for_update():
             with open(script_path, "wb") as f:
                 f.write(response.content)
             print(Fore.GREEN + "Update complete. Restarting...")
+            
+            # Add a restart flag to prevent the loop
+            os.environ['UPDATE_DONE'] = 'True'
             os.execv(sys.executable, [sys.executable] + sys.argv)
         else:
             print(Fore.GREEN + "You're running the latest version.")
     except Exception as e:
         print(Fore.RED + f"Update check failed: {e}")
+
+# Ensure we don't repeat the update process after the restart
+if 'UPDATE_DONE' in os.environ:
+    del os.environ['UPDATE_DONE']  # Remove the environment variable to ensure update only runs once
 
 colorama.init()
 username = getpass.getuser()
@@ -140,5 +148,5 @@ def main():
     pygame.quit()
 
 if __name__ == "__main__":
-    check_for_update()  
+    check_for_update()  # Add this line to check for updates before running the game
     main()
