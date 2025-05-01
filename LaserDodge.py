@@ -6,9 +6,13 @@ import getpass
 import colorama
 import sys
 import requests
+import tempfile
+import shutil
 from colorama import Fore
+import subprocess
 
-# Check for update before running the game
+
+
 def check_for_update():
     VERSION = "1.0.0"  # Current version of your script
     VERSION_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/version.txt"
@@ -19,23 +23,33 @@ def check_for_update():
         latest_version = requests.get(VERSION_URL).text.strip()
         if latest_version != VERSION:
             print(Fore.YELLOW + f"New version {latest_version} available. Updating...")
-            response = requests.get(SCRIPT_URL)
-            script_path = os.path.realpath(__file__)
-            with open(script_path, "wb") as f:
-                f.write(response.content)
-            print(Fore.GREEN + "Update complete. Restarting...")
+
             
-            # Add a restart flag to prevent the loop
-            os.environ['UPDATE_DONE'] = 'True'
-            os.execv(sys.executable, [sys.executable] + sys.argv)
+            response = requests.get(SCRIPT_URL)
+            temp_script_path = os.path.join(tempfile.gettempdir(), "LaserDodge_updated.py")
+
+            with open(temp_script_path, "wb") as f:
+                f.write(response.content)
+
+            print(Fore.GREEN + "Update complete.")
+
+            
+            
+            print(Fore.GREEN + "Launching the updated version...")
+
+            
+            subprocess.Popen([sys.executable, temp_script_path])
+            print(Fore.GREEN + "New version is now running.")
+
+           
+            sys.exit()
+
         else:
             print(Fore.GREEN + "You're running the latest version.")
+
     except Exception as e:
         print(Fore.RED + f"Update check failed: {e}")
 
-# Ensure we don't repeat the update process after the restart
-if 'UPDATE_DONE' in os.environ:
-    del os.environ['UPDATE_DONE']  # Remove the environment variable to ensure update only runs once
 
 colorama.init()
 username = getpass.getuser()
@@ -44,8 +58,8 @@ print(Fore.YELLOW + "This is just pygame's bloatware ignore it")
 print(Fore.RED + fr"IMPORTANT! Your latest score is stored in C:\Users\{username}\Documents\Laser Dodge")
 print(Fore.RED + "IMPORTANT! Do not close the game after you die wait for it to close itself, it is saving your score")
 
-
 pygame.font.init()
+
 
 def resource_path(relative_path):
     """Returns the absolute path to the resource."""
@@ -54,6 +68,7 @@ def resource_path(relative_path):
     except Exception:
         base_path = os.path.dirname(__file__)
     return os.path.join(base_path, relative_path)
+
 
 print(Fore.GREEN + "Initializing pygame window...")
 
@@ -77,6 +92,7 @@ STAR_VEL = 5
 
 FONT = pygame.font.SysFont("comicsans", 30)
 
+
 def draw(player, elapsed_time, stars):
     WIN.blit(BG, (0, 0))
     time_text = FONT.render(f"Time: {round(elapsed_time)}s", 1, "white")
@@ -85,6 +101,7 @@ def draw(player, elapsed_time, stars):
     for star in stars:
         pygame.draw.rect(WIN, "red", star)
     pygame.display.update()
+
 
 def main():
     run = True
@@ -147,6 +164,7 @@ def main():
 
     pygame.quit()
 
+
 if __name__ == "__main__":
-    check_for_update()  # Add this line to check for updates before running the game
+    check_for_update()  
     main()
