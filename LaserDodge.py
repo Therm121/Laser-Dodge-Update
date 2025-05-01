@@ -5,7 +5,30 @@ import os
 import getpass
 import colorama
 import sys
+import requests
 from colorama import Fore
+
+# Check for update before running the game
+def check_for_update():
+    VERSION = "1.0.0"  # Current version of your script
+    VERSION_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/version.txt"
+    SCRIPT_URL = "https://raw.githubusercontent.com/Therm121/Laser-Dodge-Update/main/LaserDodge.py"
+
+    try:
+        print(Fore.CYAN + "Checking for updates...")
+        latest_version = requests.get(VERSION_URL).text.strip()
+        if latest_version != VERSION:
+            print(Fore.YELLOW + f"New version {latest_version} available. Updating...")
+            response = requests.get(SCRIPT_URL)
+            script_path = os.path.realpath(__file__)
+            with open(script_path, "wb") as f:
+                f.write(response.content)
+            print(Fore.GREEN + "Update complete. Restarting...")
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+        else:
+            print(Fore.GREEN + "You're running the latest version.")
+    except Exception as e:
+        print(Fore.RED + f"Update check failed: {e}")
 
 colorama.init()
 username = getpass.getuser()
@@ -106,7 +129,6 @@ def main():
             pygame.display.update()
             pygame.time.delay(4000)
 
-
             save_dir = os.path.join(os.path.expanduser("~"), "Documents", "Laser Dodge")
             os.makedirs(save_dir, exist_ok=True)
             with open(os.path.join(save_dir, "Times.txt"), "a") as file:
@@ -119,5 +141,5 @@ def main():
     pygame.quit()
 
 if __name__ == "__main__":
+    check_for_update()  # Add this line to check for updates before running the game
     main()
-
