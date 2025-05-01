@@ -132,9 +132,9 @@ def main():
                 break
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and player.x - PLAYER_VEL >= 0:
+        if keys[pygame.K_a] and player.x - PLAYER_VEL >= 0:
             player.x -= PLAYER_VEL
-        if keys[pygame.K_RIGHT] and player.x + PLAYER_VEL + player.width <= WIDTH:
+        if keys[pygame.K_d] and player.x + PLAYER_VEL + player.width <= WIDTH:
             player.x += PLAYER_VEL
 
         for star in stars[:]:
