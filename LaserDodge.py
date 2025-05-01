@@ -7,7 +7,6 @@ import colorama
 import sys
 import requests
 import tempfile
-import shutil
 from colorama import Fore
 import subprocess
 
